@@ -15,6 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ForgotPassword } from "./components/ForgotPassword";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -122,6 +123,10 @@ const LoginForm = () => {
               Acessar
             </span>
           </Button>
+
+          <div className="flex items-center justify-center">
+            <ForgotPassword />
+          </div>
         </CardContent>
       </form>
     </Card>
