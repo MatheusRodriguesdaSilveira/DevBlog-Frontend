@@ -1,3 +1,43 @@
+# Dev Blog - Matheus Rodrigues
+
+Bem-vindo ao meu Dev Blog! Aqui compartilho meus projetos, aprendizados e experiências no mundo do desenvolvimento de software. Este blog é um espaço onde posso documentar minhas jornadas e interações com tecnologias que estou explorando, principalmente em desenvolvimento frontend e backend.
+
+![image](https://github.com/user-attachments/assets/cb4876b2-df8a-421f-b6c6-28b93127e901)
+![image](https://github.com/user-attachments/assets/292a142a-ab17-4faf-8695-82d41d65e77b)
+![image](https://github.com/user-attachments/assets/2fa3dfbf-6939-494e-a954-cc37966fe0c0)
+
+
+## Tecnologias Usadas
+
+Este blog foi desenvolvido utilizando as seguintes tecnologias:
+
+- **Frontend:**
+  - React
+  - Tailwind CSS
+  - JavaScript
+  - Vercel (para deploy)
+
+- **Backend:**
+  - Node.js
+  - TypeScript
+  - Express.js
+  - JWT
+  - Bcript
+  - entre outros...
+
+## Funcionalidades
+
+- **Postagens de Blog:** A principal funcionalidade do blog é a publicação de artigos sobre temas de desenvolvimento.
+- **Categorias de Conteúdo:** Os posts são divididos por categorias para facilitar a navegação.
+- **Comentários:** Os leitores podem deixar seus comentários nos posts.
+- **Busca de Posts:** Função para pesquisar artigos por palavras-chave.
+
+## Como Rodar o Projeto
+
+1. **Clone este repositório**:
+   ```bash
+   git clone https://github.com/MatheusRodriguesdaSilveira/dev-blog.git
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
