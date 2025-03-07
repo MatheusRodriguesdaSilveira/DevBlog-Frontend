@@ -116,7 +116,7 @@ export const UserTemplate = () => {
   };
 
   return (
-    <div className="space-y-2">
+    <div className="max-h-[200px] overflow-y-auto">
       {users.map((user, index) => (
         <div
           key={index}
