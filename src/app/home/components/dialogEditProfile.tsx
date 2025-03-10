@@ -9,11 +9,23 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 import { useState, useEffect, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-import { Bolt, UploadCloud } from "lucide-react";
+import { Bolt, Trash2, UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -151,6 +163,8 @@ export function DialogEditProfile() {
     }
   };
 
+  const handleDeleteProfile = async () => {};
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -160,15 +174,16 @@ export function DialogEditProfile() {
             variant="ghost"
           >
             <Bolt />
-            Edit Profile
+            Editar Perfil
           </Button>
         </div>
       </DialogTrigger>
       <DialogContent className="xl:max-h-[700px] 2xl:max-h-[800px]">
         <DialogHeader>
-          <DialogTitle>Edit Profile</DialogTitle>
+          <DialogTitle>Editar Perfil</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
+            Faça alterações no seu perfil aqui. Clique em salvar quando
+            terminar.
           </DialogDescription>
         </DialogHeader>
         {errorMessage && (
@@ -178,7 +193,7 @@ export function DialogEditProfile() {
         )}
         <form className="gap-5">
           <Label htmlFor="name" className="text-right">
-            Name
+            Nome
           </Label>
           <Input
             id="name"
@@ -189,7 +204,7 @@ export function DialogEditProfile() {
           />
 
           <Label htmlFor="blogProfile" className="text-right">
-            BlogProfile
+            Blog
           </Label>
           <Input
             id="blogProfile"
@@ -203,7 +218,7 @@ export function DialogEditProfile() {
           />
 
           <Label htmlFor="linkedinProfile" className="text-right">
-            LinkedinProfile
+            Linkedin
           </Label>
           <Input
             id="linkedinProfile"
@@ -217,7 +232,7 @@ export function DialogEditProfile() {
           />
 
           <Label htmlFor="description" className="text-right">
-            Description
+            Descrição
           </Label>
           <Textarea
             id="description"
@@ -251,12 +266,39 @@ export function DialogEditProfile() {
             </Label>
           </div>
           <DialogFooter>
-            <Button
-              onClick={handleSave}
-              disabled={isLoading || formData.name === ""}
-            >
-              {isLoading ? "Loading..." : "Save changes"}
-            </Button>
+            <div className="flex justify-between gap-2">
+              <Button
+                onClick={handleSave}
+                disabled={isLoading || formData.name === ""}
+              >
+                {isLoading ? "Carregando..." : "Salvar mudanças"}
+              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <button>
+                    <Trash2 className="size-5 text-zinc-400" />
+                  </button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Apagar Perfil</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Essa ação não pode ser desfeita. Esta conta será apagada
+                      permanentemente.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleDeleteProfile}
+                      className="bg-red-500 hover:bg-red-700 text-zinc-100 hover:text-zinc-300"
+                    >
+                      Deletar seu perfil <Trash2 />
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
           </DialogFooter>
         </form>
       </DialogContent>
