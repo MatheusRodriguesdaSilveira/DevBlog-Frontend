@@ -1,14 +1,16 @@
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+"use client";
+
+import { useRouter, useSearchParams } from "next/navigation";
+import { useMemo, useState } from "react";
 import { api } from "@/services/api";
 
-export default function ResetPasswordPage({
-  searchParams,
-}: {
-  searchParams: { token?: string };
-}) {
+export default function ResetPasswordPage() {
   const router = useRouter();
-  const token = searchParams.token || "";
+  const searchParams = useSearchParams();
+
+  // Extraindo o token de forma segura
+  const token = useMemo(() => searchParams.get("token"), [searchParams]);
+
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
@@ -16,14 +18,12 @@ export default function ResetPasswordPage({
     event.preventDefault();
     try {
       await api.post("/reset", { token, password, passwordConfirmation });
+      router.push("/");
     } catch (error) {
       console.error("Erro ao redefinir senha:", error);
       alert("Erro ao redefinir senha. Tente novamente.");
-    } finally {
-      router.push("/");
     }
   };
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <div className="max-w-lg w-full">
