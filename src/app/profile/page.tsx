@@ -168,6 +168,15 @@ const ProfilePage = () => {
     fetchUserData();
   }, [selectedPostId]);
 
+  if (!userData) {
+    return (
+      <div className="flex flex-col justify-center items-center h-screen z-0">
+        <h1 className="text-zinc-400 m-2">Carregando...</h1>
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-red-500" />
+      </div>
+    );
+  }
+
   const handleSelectPost = (postId: string) => {
     setSelectedPostId(postId);
   };
@@ -206,6 +215,7 @@ const ProfilePage = () => {
       setErrorMessage("Erro ao deletar post.");
     }
   };
+
   const handleEditPost = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -249,6 +259,7 @@ const ProfilePage = () => {
       setErrorMessage("Erro ao editar post.");
     } finally {
       setIsLoading(false);
+      window.location.reload();
     }
   };
 
@@ -283,14 +294,6 @@ const ProfilePage = () => {
     setComment(comment + emoji);
   };
 
-  if (!userData) {
-    return (
-      <div className="flex flex-col justify-center items-center h-screen z-0">
-        <h1 className="text-zinc-400 m-2">Carregando...</h1>
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-red-500" />
-      </div>
-    );
-  }
   const handleLikeButton = async (postId: string, userId: string) => {
     try {
       const token = getCookie("login");
@@ -439,10 +442,10 @@ const ProfilePage = () => {
                 />
               </div>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="xl:max-h-[700px] 2xl:max-h-[800px]">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-1">
-                  Edit Post
+                  Editar Postagem
                   <Dialog>
                     <DialogTrigger asChild>
                       <div className="flex px-2 items-center dark:text-zinc-200 dark:hover:bg-zinc-800 hover:bg-zinc-100 rounded-sm">
@@ -460,10 +463,10 @@ const ProfilePage = () => {
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>Edit Post</DialogTitle>
+                        <DialogTitle> Editar Postagem</DialogTitle>
                         <DialogDescription>
-                          Make changes to your post here. Click save when you're
-                          done.
+                          Faça alterações em sua postagem aqui. Clique em salvar
+                          quando terminar.
                         </DialogDescription>
                       </DialogHeader>
                       {errorMessage && (
@@ -485,7 +488,7 @@ const ProfilePage = () => {
                         </Label>
 
                         <Label htmlFor="description" className="text-right">
-                          Description
+                          Descrição
                           <Textarea
                             id="description"
                             value={description || ""}
@@ -556,14 +559,13 @@ const ProfilePage = () => {
                   </Label>
                 </div>
 
-                <Label className="text-left">
+                <Label>
                   <Image
                     src={post.imageUrl || TemplateError}
                     alt="Post"
                     width={400}
-                    height={300}
-                    style={{ objectFit: "cover" }}
-                    className="w-full h-full"
+                    height={400}
+                    className="w-[500px] h-[450px] 2xl:h-full 2xl:w-full rounded-md"
                     priority
                   />
                 </Label>
@@ -781,7 +783,7 @@ const ProfilePage = () => {
                     </Dialog>
                   </div>
                 </div>
-                <Label className="text-left text-zinc-600 text-lg max-h-[200px] overflow-y-auto">
+                <Label className="text-left text-zinc-600 text-lg max-h-[100px] 2xl:h-[250px] overflow-y-auto">
                   {post.description
                     ? post.description
                         .split("\n")
