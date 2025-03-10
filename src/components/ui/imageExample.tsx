@@ -115,7 +115,7 @@ export const ImageTemplate = () => {
         setInfo(response.data || []);
       } catch (error) {
         console.error("Erro ao carregar dados do usuário:", error);
-        router.push("/home");
+        router.push("/");
       }
     };
 

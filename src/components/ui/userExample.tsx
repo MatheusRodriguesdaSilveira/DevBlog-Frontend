@@ -116,7 +116,7 @@ export const UserTemplate = () => {
   };
 
   return (
-    <div className="max-h-[200px] overflow-y-auto">
+    <div className="max-h-[200px] overflow-y-auto mx-1 2xl:mx-0">
       {users.map((user, index) => (
         <div
           key={index}
@@ -128,14 +128,14 @@ export const UserTemplate = () => {
                 fetchPosts(user.id);
               }}
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 <Image
                   src={user.profilePicture || User}
                   alt="profile"
-                  width={30}
-                  height={30}
+                  width={100}
+                  height={100}
                   priority
-                  className="2xl:w-8 2xl:h-8 xl:h:w-7 xl:h-7 rounded-full border border-red-700 flex-shrink-0"
+                  className="size-8 rounded-full border border-red-700 flex-shrink-0"
                 />
                 <p className="text-xs">{user.name}</p>
               </div>
