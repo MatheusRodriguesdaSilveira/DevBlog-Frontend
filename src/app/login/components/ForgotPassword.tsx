@@ -29,18 +29,6 @@ const handleSubmitLink = async () => {
   }
 }
 
-const handleSubmitLinkAgain = async () => {
-  setLoading(true);
-  try {
-    const response = await api.post("/forgot", {email})
-    const url = response.data.user.url;
-
-    setUrl(url);
-  } catch (error) {
-    console.log(error)
-  }
-}
-
 function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
   setEmail(e.target.value);
 }
@@ -77,10 +65,6 @@ function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
           <Button onClick={handleSubmitLink} disabled={loading}>{loading ? "Enviando..." : "Enviar"}</Button>
           <div className="flex justify-between">
             {(url !== "") && <a href={url} target="_blank" className="text-blue-500 text-sm underline">Resetar Senha</a>}
-
-            {/* {(!loading) ? "" :          
-              <button className="text-sm hover:underline items-start justify-start" onClick={handleSubmitLinkAgain} disabled={loading}>Enviar novamente</button> 
-            }   */}
           </div>
         </div>
       </DialogContent>
