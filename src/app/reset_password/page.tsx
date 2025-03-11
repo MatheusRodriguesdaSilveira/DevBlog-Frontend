@@ -1,14 +1,21 @@
 "use client";
 
+import { Suspense, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
 import { api } from "@/services/api";
 
 export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <ResetPasswordContent />
+    </Suspense>
+  );
+}
+
+function ResetPasswordContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Extraindo o token de forma segura
   const token = useMemo(() => searchParams.get("token"), [searchParams]);
 
   const [password, setPassword] = useState("");
@@ -24,6 +31,7 @@ export default function ResetPasswordPage() {
       alert("Erro ao redefinir senha. Tente novamente.");
     }
   };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <div className="max-w-lg w-full">
@@ -60,6 +68,15 @@ export default function ResetPasswordPage() {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+//  Loading
+function Loading() {
+  return (
+    <div className="flex justify-center items-center h-screen">
+      <p className="text-white">Carregando...</p>
     </div>
   );
 }
