@@ -3,7 +3,15 @@
 import { useState, useEffect } from "react";
 import { redirect, useRouter } from "next/navigation";
 import { setCookie } from "cookies-next";
-import { Mail, Lock, CircleUser, AtSign, CodeXml } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  CircleUser,
+  AtSign,
+  CodeXml,
+  EyeOff,
+  Eye,
+} from "lucide-react";
 import { api } from "@/services/api";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -22,6 +30,7 @@ const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
 
@@ -73,6 +82,10 @@ const LoginForm = () => {
     setEmail(e.target.value);
   }
 
+  const togglePasswordVisible = () => {
+    setIsVisible(!isVisible);
+  };
+
   return (
     <Card className="p-6 mx-auto flex flex-col items-center max-w-md relative overflow-hidden z-10 rounded-lg shadow-md before:w-24 before:h-24 before:absolute before:bg-red-700 before:rounded-full before:-z-10 before:blur-2xl after:w-32 after:h-32 after:absolute after:bg-zinc-800 after:rounded-full after:-z-10 after:blur-xl after:top-24 after:-right-12">
       <form onSubmit={handleLogin}>
@@ -104,7 +117,7 @@ const LoginForm = () => {
             <Lock className="absolute left-2 top-1/2 transform -translate-y-1/2 text-zinc-900 dark:text-zinc-400 size-5" />
             <Input
               className="pl-8 w-full dark:border-zinc-700 border-zinc-900"
-              type="password"
+              type={isVisible ? "text" : "password"}
               placeholder="Digite sua senha..."
               name="password"
               value={password}
@@ -113,6 +126,16 @@ const LoginForm = () => {
               }
               required
             />
+            <div
+              onClick={togglePasswordVisible}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+            >
+              {isVisible ? (
+                <EyeOff className="text-zinc-400 size-4" />
+              ) : (
+                <Eye className="text-zinc-400 size-4" />
+              )}
+            </div>
           </div>
           <Button
             type="submit"
