@@ -161,7 +161,7 @@ const ProfilePage = () => {
         setDescription(posts[selectedPostId]?.description);
       } catch (error) {
         console.error("Erro ao carregar dados do usuário:", error);
-        router.push("/home");
+        router.push("/");
       }
     };
 
