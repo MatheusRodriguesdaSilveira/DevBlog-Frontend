@@ -43,7 +43,7 @@ const HomePage = () => {
         setUserData(response.data);
       } catch (error) {
         console.error("Error loading user data:", error);
-        router.push("/home");
+        router.push("/cadastro");
       }
     };
 
