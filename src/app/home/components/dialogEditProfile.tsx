@@ -50,7 +50,10 @@ export function DialogEditProfile() {
   const [preview, setPreview] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const [userData, setUserData] = useState<UserData | null>(null);
+
+  const [isProfileId, setIsProfileId] = useState("");
 
   const [formData, setFormData] = useState<UserData>({
     name: "",
@@ -77,7 +80,7 @@ export function DialogEditProfile() {
 
         const { name, descriptionProfile, blogProfile, linkedinProfile } =
           response.data;
-        setUserData(response.data);
+
         setFormData({
           name,
           descriptionProfile,
@@ -85,6 +88,9 @@ export function DialogEditProfile() {
           linkedinProfile,
           profilePicture: null,
         });
+
+        setUserData(response.data);
+        setIsProfileId(response.data.id);
       } catch {
         router.push("/home");
       }
@@ -163,7 +169,29 @@ export function DialogEditProfile() {
     }
   };
 
-  const handleDeleteProfile = async () => {};
+  const handleDeleteProfile = async () => {
+    const token = getCookie("login");
+
+    if (!token) {
+      setErrorMessage("Login token not found.");
+      return;
+    }
+
+    try {
+      const response = await api.delete(`/user/${isProfileId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        window.location.reload();
+      }
+      console.log(response);
+    } catch (error) {
+      new Error("Error deleting profile." + error);
+    }
+  };
 
   return (
     <Dialog>
@@ -273,6 +301,7 @@ export function DialogEditProfile() {
               >
                 {isLoading ? "Carregando..." : "Salvar mudanças"}
               </Button>
+
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <button>
