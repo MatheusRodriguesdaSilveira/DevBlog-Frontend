@@ -116,11 +116,11 @@ export const UserTemplate = () => {
   };
 
   return (
-    <div className="max-h-[200px] overflow-y-auto mx-1 2xl:mx-0">
+    <div className="xl:max-h-[250px] 2xl:max-h-[300px] overflow-y-auto mx-1 2xl:mx-0">
       {users.map((user, index) => (
         <div
           key={index}
-          className="flex items-center justify-between border rounded-lg py-1.5 px-1.5 mb-2"
+          className="bg-zinc-900 flex items-center justify-between border border-zinc-700 rounded-lg py-1.5 px-1.5 mb-2 xl:mr-2 2xl:mr-1"
         >
           <Dialog>
             <DialogTrigger
@@ -135,9 +135,9 @@ export const UserTemplate = () => {
                   width={100}
                   height={100}
                   priority
-                  className="size-8 rounded-full border border-red-700 flex-shrink-0"
+                  className="size-8 rounded-full border border-red-500"
                 />
-                <p className="text-xs">{user.name}</p>
+                <p className="text-xs truncate max-w-[100px]">{user.name}</p>
               </div>
             </DialogTrigger>
 
@@ -206,13 +206,9 @@ export const UserTemplate = () => {
               </div>
             </DialogContent>
 
-            <Button
-              variant="secondary"
-              size="sm"
-              className="flex rounded-lg gap-1 px-2"
-            >
-              <p className="text-xs font-medium flex">Seguir✔</p>
-            </Button>
+            <button className="flex rounded-md px-2 py-1 bg-red-600 hover:bg-red-900 duration-300">
+              <p className="text-xs">Seguir</p>
+            </button>
           </Dialog>
         </div>
       ))}
