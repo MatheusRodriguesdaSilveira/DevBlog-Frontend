@@ -18,6 +18,7 @@ export function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmitLink = async () => {
     setLoading(true);
@@ -27,7 +28,7 @@ export function ForgotPassword() {
 
       setUrl(url);
     } catch (error) {
-      console.log(error);
+      setError("Algo deu errado! Seu email não foi encontrado.");
     }
   };
 
@@ -47,6 +48,7 @@ export function ForgotPassword() {
           </div>
         </div>
         <DialogHeader>
+          {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
           <DialogTitle>Problemas para entrar?</DialogTitle>
           <DialogDescription>
             Insira o seu email e enviaremos um link para você voltar a acessar a
