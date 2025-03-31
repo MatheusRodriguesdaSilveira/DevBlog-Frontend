@@ -71,11 +71,11 @@ export const NavBar = () => {
   return (
     <>
       <div className="flex relative z-50">
-        <div className="fixed 2xl:w-[300px] xl:w-[300px] lg:w-[250px] h-full p-10 border-r-2">
+        <div className="fixed 2xl:w-[300px] xl:w-[300px] lg:w-[250px] md:w-[200px] h-full p-10 border-r-2">
           <LogoHeader />
           <DropdownMenuSeparator />
 
-          <ul className="lg:text-sm lg:p-5 xl:p-5 xl:text-base 2xl:p-5 2xl:text-lg">
+          <ul className="text-xs p-2 lg:text-sm lg:p-5 xl:p-5 xl:text-base 2xl:p-5 2xl:text-lg">
             <li className="flex xl:gap-1 2xl:gap-2 mb-5">
               <Home className="2xl:size-7 xl:size-5 lg:size-5" />
               <a
@@ -101,7 +101,7 @@ export const NavBar = () => {
               <Image
                 src={userData.profilePicture || UserProfile}
                 alt="profile"
-                className="2xl:w-8 2xl:h-8 xl:w-7 xl:h-7 lg:w-7 lg:h-7 rounded-full border border-red-00 flex-shrink-0"
+                className="2xl:w-8 2xl:h-8 xl:w-7 xl:h-7 lg:w-7 lg:h-7 md:w-6 md:h-6 sm:w-5 sm:h-5 rounded-full border border-red-00 flex-shrink-0"
                 width={500}
                 height={500}
                 priority

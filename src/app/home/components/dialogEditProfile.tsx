@@ -196,13 +196,15 @@ export function DialogEditProfile() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="flex mt-1 px-2 h-8 items-center dark:text-zinc-200 dark:hover:bg-zinc-800 hover:bg-zinc-100 rounded-sm">
+        <div className="flex mt-1 px-1 h-8 lg:px-2 lg:h-8 items-center dark:text-zinc-200 dark:hover:bg-zinc-800 hover:bg-zinc-100 rounded-sm">
           <Button
-            className="bg-transparent border-none px-0 h-7 hover:bg-transparent w-full items-center justify-start"
+            className="text-xs xl:text-sm bg-transparent border-none px-0 h-7 hover:bg-transparent w-full items-center justify-start"
             variant="ghost"
           >
-            <Bolt />
-            Editar Perfil
+            <div className="flex items-center gap-1 text-xs">
+              <Bolt className="xl:size-6 lg:size-5 md:size-4 text-red-500" />
+              Editar Perfil
+            </div>
           </Button>
         </div>
       </DialogTrigger>

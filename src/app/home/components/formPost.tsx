@@ -88,12 +88,12 @@ export const FormPost = () => {
     <Dialog>
       <DialogTrigger asChild>
         <Button
-          className="2xl:w-[170px] lg:w-[170px] border border-red-500 border-dashed py-6 hover:bg-zinc-200 dark:hover:bg-zinc-900/50 lg:my-5"
+          className="2xl:w-[170px] lg:w-[170px] md:w-[140px] border border-red-500 border-dashed py-6 hover:bg-zinc-200 dark:hover:bg-zinc-900/50 lg:my-5 md:my-5 my-3"
           variant="outline"
         >
           <div className="flex gap-1 items-center">
-            Adicionar Postagem
-            <span className="text-sm text-red-500 group cursor-pointer outline-none hover:rotate-90 duration-300">
+            <span className="text-xs lg:text-sm">Adicionar Postagem</span>
+            <span className="text-xs lg:text-sm text-red-500 group cursor-pointer outline-none hover:rotate-90 duration-300">
               <PlusCircle />
             </span>
           </div>

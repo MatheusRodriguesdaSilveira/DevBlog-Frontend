@@ -32,7 +32,7 @@ export const SideBarColumn = () => {
   return (
     <>
       <div className="flex relative">
-        <div className="fixed 2xl:w-[300px] xl:w-[300px] h-full right-0 border-l-2">
+        <div className="fixed 2xl:w-[300px] xl:w-[300px] lg:w-[300px] md:w-[250px] h-full right-0 border-l-2">
           <div className="mx-4 border-x-2 border-b-2 rounded-b-2xl p-5 h-[300px] mb-10">
             <div className="flex justify-center gap-1.5 pb-5">
               <ChartNoAxesColumnIncreasing className="2xl:size-6 xl:size-5 text-red-500" />
@@ -63,9 +63,9 @@ export const SideBarColumn = () => {
           </div>
 
           <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-            <div className="mx-4 border-2 rounded-2xl 2xl:p-5 xl:p-2 h-full">
+            <div className="mx-4 border-2 rounded-2xl 2xl:p-5 xl:p-2 md:p-1 h-full">
               <div className="flex justify-center gap-1 pb-5 items-center">
-                <h1 className="font-bold 2xl:text-lg xl:text-xs">
+                <h1 className="font-bold 2xl:text-lg xl:text-xs md:text-xs">
                   Sugestões Para Você
                 </h1>
                 <CollapsibleTrigger asChild>
@@ -84,11 +84,11 @@ export const SideBarColumn = () => {
                 ) : (
                   <div className="flex gap-2 border rounded-lg py-1.5 px-1.5 items-center justify-between">
                     <div className="flex items-center space-x-1.5">
-                      <Skeleton className="h-10 w-10 rounded-full" />
-                      <Skeleton className="h-4 w-[70px]" />
+                      <Skeleton className="lg:h-10 lg:w-10 md:h-6 md:w-6 rounded-full" />
+                      <Skeleton className="lg:h-4 lg:w-[70px] md:h-2 md:w-[60px]" />
                     </div>
                     <div>
-                      <Skeleton className="h-[30px] w-[80px]" />
+                      <Skeleton className="lg:h-[30px] lg:w-[80px] md:h-2 md:w-[40px]" />
                     </div>
                   </div>
                 )}

@@ -134,7 +134,6 @@ export const ImageTemplate = () => {
     const { userId, postId } = userPostInfo;
     setSelectedUserId(userId);
     setSelectedPostId(postId);
-    console.log(`id user: ${userId}, id post: ${postId}`);
   };
 
   const handleCreateComment = async (
@@ -243,19 +242,22 @@ export const ImageTemplate = () => {
               new Date(a.createdAt && a.updatedAt).getTime()
           )
           .map((post, index) => (
-            <div key={post.id} className="mt-10 w-[800px]">
-              <div className="flex gap-4 justify-start items-start">
-                <div className="py-1 flex-shrink-0">
+            <div
+              key={post.id}
+              className="mt-10 md:w-[400px] lg:w-[800px] xl:w-[1000px]"
+            >
+              <div className="flex md:gap-2 lg:gap-4 justify-start items-start">
+                <div className="ml-0 lg:ml-10 xl:ml-0 py-2 xl:py-1 flex-shrink-0">
                   <Image
                     width={200}
                     height={200}
                     style={{ objectFit: "cover" }}
                     src={(post.user as any).profilePicture || UserProfile}
                     alt={(post.user as any).name}
-                    className="xl:w-12 xl:h-12 lg:w-10 lg:h-10 h-2 w-2 rounded-full border border-red-500"
+                    className="xl:w-12 xl:h-12 lg:w-10 lg:h-10 md:w-10 md:h-10 h-2 w-2 rounded-full border border-red-500"
                   />
                 </div>
-                <div className="flex flex-col 2xl:w-[500px] xl:w-[500px] lg:w-[500px] max-w-7xl sm:p-6 lg:p-0">
+                <div className="flex flex-col 2xl:w-[600px] xl:w-[500px] lg:w-[500px] md:w-[350px] max-w-7xl sm:p-6 lg:p-0 md:p-0">
                   <p className="text-lg font-medium">
                     {(post.user as any).name}
                   </p>
@@ -279,7 +281,7 @@ export const ImageTemplate = () => {
                     </div>
                   </div>
 
-                  <div className="w-full 2xl:h-96 xl:h-72 md:h-56 lg:h-72 relative rounded-3xl border border-zinc-800 overflow-hidden bg-zinc-900/30">
+                  <div className="w-full 2xl:h-96 xl:h-72 lg:h-72 md:h-56 h-40 relative rounded-3xl border border-zinc-800 overflow-hidden bg-zinc-900/30">
                     <Image
                       priority
                       src={post.imageUrl || Template}
@@ -530,7 +532,7 @@ export const ImageTemplate = () => {
 
                     <div className="w-full max-w-3xl text-left leading-loose">
                       {post.description ? (
-                        <div className="list-disc list-inside">
+                        <div className="list-disc list-inside text-sm xl:text-base">
                           {post.description.split("\n").map((item, index) => (
                             <div key={index}>{item}</div>
                           ))}

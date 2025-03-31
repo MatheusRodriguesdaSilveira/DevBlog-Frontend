@@ -64,7 +64,10 @@ const HomePage = () => {
       <SideBarColumn />
       <ButtonScrollToTop />
       <div className="flex flex-col items-center justify-center m-8">
-        <Tabs defaultValue="forYou" className="w-[600px]">
+        <Tabs
+          defaultValue="forYou"
+          className="w-[300px] md:w-[450px] lg:w-[600px] xl:w-[650px] 2xl:w-[700px]"
+        >
           {/* Tabs */}
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="forYou">Para você</TabsTrigger>
@@ -80,7 +83,7 @@ const HomePage = () => {
                 style={{ objectFit: "cover" }}
                 src={userData?.profilePicture || UserProfile}
                 alt="profile"
-                className="xl:w-12 xl:h-12 lg:w-10 lg:h-10 h-2 w-2 rounded-full border border-red-500 "
+                className="xl:w-12 xl:h-12 lg:w-10 lg:h-10 h-8 w-8 rounded-full border border-red-500"
               />
             </div>
             <div className="flex gap-2">
