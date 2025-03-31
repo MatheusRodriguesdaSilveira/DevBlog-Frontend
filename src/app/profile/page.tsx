@@ -81,6 +81,8 @@ interface UserData {
   content: string;
   likes: string;
   initialLiked: boolean;
+  followers: string;
+  following: string;
 }
 
 const ProfilePage = () => {
@@ -104,6 +106,11 @@ const ProfilePage = () => {
   const [likesByPost, setLikesByPost] = useState<{ [key: string]: string[] }>(
     {}
   );
+
+  const [following, setFollowing] = useState(false);
+  const [followers, setFollowers] = useState(false);
+  const [followingUsers, setFollowingUsers] = useState([]);
+  const [followersUsers, setFollowersUsers] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -150,6 +157,53 @@ const ProfilePage = () => {
           },
           {}
         );
+
+        const follower = response.data.followers?.map(
+          (follower: { id: string; followerId: string }) => {
+            return follower;
+          }
+        );
+
+        const following = response.data.following?.map(
+          (following: { id: string; followingId: string }) => {
+            return following;
+          }
+        );
+
+        const followingUsers = response.data.following?.map(
+          (followingUser: {
+            follower: {
+              name: string;
+              profilePicture: string;
+            };
+          }) => {
+            return {
+              name: followingUser.follower.name,
+              profilePicture: followingUser.follower.profilePicture,
+            };
+          }
+        );
+
+        const followersUsers = response.data.followers?.map(
+          (followersUser: {
+            followed: {
+              name: string;
+              profilePicture: string;
+            };
+          }) => {
+            return {
+              name: followersUser.followed.name,
+              profilePicture: followersUser.followed.profilePicture,
+            };
+          }
+        );
+
+        console.log("detalhes seguidos", followingUsers);
+
+        setFollowing(following?.length);
+        setFollowers(follower?.length);
+        setFollowingUsers(followingUsers);
+        setFollowersUsers(followersUsers);
 
         setLikesByPost(likesByPost);
         setLiked(likesByPost?.[selectedPostId]?.includes(currentUserId));
@@ -358,19 +412,19 @@ const ProfilePage = () => {
             style={{ objectFit: "cover" }}
             src={userData.profilePicture || UserProfile}
             alt={userData.name || "Foto de perfil"}
-            className="2xl:w-40 2xl:h-40 xl:w-32 xl:h-32 lg:w-24 lg:h-24 md:w-24 md:h-24 h-2 w-2 rounded-full border-2 border-red-500 flex-shrink-0"
+            className="2xl:w-40 2xl:h-40 xl:w-32 xl:h-32 lg:w-20 lg:h-20 md:w-20 md:h-20 h-2 w-2 rounded-full border-2 border-red-500 flex-shrink-0"
             loading="lazy"
           />
         )}
 
-        <div className="2xl:mx-16 xl:mx-4">
-          <div className="flex-col flex gap-3">
+        <div className="2xl:mx-16 xl:mx-4 lg:mx-4 md:mx-4 mx-4">
+          <div className="flex-col flex gap-1 lg:gap-3">
             <div className="flex flex-col">
-              <p className="2xl:text-2xl xl:text-xl font-medium">
+              <p className="2xl:text-2xl xl:text-xl text-xs font-medium">
                 {userData.name || "Nome não disponível"}
               </p>
             </div>
-            <div className="text-sm font-medium text-zinc-950 dark:text-zinc-500 xl:max-w-sm 2xl:max-w-xl">
+            <div className="text-xs xl:text-base font-medium text-zinc-950 dark:text-zinc-500 w-[300px] lg:w-[400px] xl:w-[500px] 2xl:w-[600px]">
               {userData.descriptionProfile ? (
                 <div className="list-disc list-inside">
                   {userData.descriptionProfile
@@ -383,7 +437,7 @@ const ProfilePage = () => {
                 "Descrição não disponível"
               )}
             </div>
-            <div className="text-sm font-medium text-blue-700 dark:text-blue-500/60 ">
+            <div className="text-xs xl:text-sm font-medium text-blue-700 dark:text-blue-500/60 ">
               <div className="flex items-center gap-1">
                 <Globe className="size-4" />
                 <Link
@@ -406,31 +460,96 @@ const ProfilePage = () => {
               </div>
             </div>
           </div>
-          <div className="flex gap-5 font-semibold mt-5">
+          <div className="flex items-center justify-center text-xs lg:text-sm xl:text-base gap-5 font-semibold mt-5">
             <p className="text-zinc-700 dark:text-zinc-200 leading-[10px]">
               {post.length} publicações
             </p>
-            <p className="text-zinc-700 dark:text-zinc-200 leading-[10px]">
-              {0} seguidores
-            </p>
-            <p className="text-zinc-700 dark:text-zinc-200 leading-[10px]">
-              {0} seguindo
-            </p>
+            {/* Seguidores */}
+            <Dialog>
+              <DialogTrigger className="text-zinc-700 dark:text-zinc-200 leading-[10px]">
+                {followers} seguidores
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Seguidores</DialogTitle>
+                </DialogHeader>
+                <DialogDescription></DialogDescription>
+                <div className="flex flex-col gap-2">
+                  {followersUsers.map((user, index) => (
+                    <div key={index}>
+                      <div className="flex items-center gap-2">
+                        <Image
+                          src={
+                            (user as UserData).profilePicture || TemplateError
+                          }
+                          alt="profile"
+                          width={100}
+                          height={100}
+                          priority
+                          className="size-8 rounded-full border border-red-500"
+                        />
+                        <div className="flex flex-col">
+                          <p className="2xl:text-base xl:text-sm text-xs font-medium">
+                            {(user as UserData).name || "Nome não disponível"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            {/* Seguindo */}
+            <Dialog>
+              <DialogTrigger className="text-zinc-700 dark:text-zinc-200 leading-[10px]">
+                {following} seguindo
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Seguindo</DialogTitle>
+                </DialogHeader>
+                <DialogDescription></DialogDescription>
+                <div className="flex flex-col gap-2">
+                  {followingUsers.map((user, index) => (
+                    <div key={index}>
+                      <div className="flex items-center gap-2">
+                        <Image
+                          src={
+                            (user as UserData).profilePicture || TemplateError
+                          }
+                          alt="profile"
+                          width={100}
+                          height={100}
+                          priority
+                          className="size-8 rounded-full border border-red-500"
+                        />
+                        <div className="flex flex-col">
+                          <p className="2xl:text-base xl:text-sm text-xs font-medium">
+                            {(user as UserData).name || "Nome não disponível"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </DialogContent>
+            </Dialog>
+            <div className="">
+              <DialogEditProfile />
+            </div>
           </div>
-        </div>
-        <div className="">
-          <DialogEditProfile />
         </div>
       </div>
       <div className="mb-10 flex justify-center items-center">
-        <DropdownMenuSeparator className="xl:w-6/12 2xl:w-5/12" />
+        <DropdownMenuSeparator className="2xl:w-7/12 xl:w-6/12 lg:w-5/12 md:w-5/12" />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 2xl:w-[1200px] xl:w-[650px] lg:w-[700px] mx-auto sm:p-6 lg:p-0">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 2xl:w-[1200px] xl:w-[750px] lg:w-[500px] md:w-[500px] mx-auto sm:p-6 lg:p-0">
         {post?.map((post) => (
           <Dialog key={post.id}>
             <DialogTrigger onClick={() => handleSelectPost(post.id)} asChild>
-              <div className="w-full 2xl:h-96 xl:h-80 md:h-56 lg:h-72 relative rounded-3xl border border-zinc-800 overflow-hidden bg-zinc-900/30">
+              <div className="w-full 2xl:h-80 xl:h-72 lg:h-56 md:h-56 relative rounded-3xl border border-zinc-800 overflow-hidden bg-zinc-900/30">
                 <Image
                   src={post.imageUrl || TemplateError}
                   alt="Post"
