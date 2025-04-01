@@ -190,7 +190,7 @@ export const UserTemplate = () => {
               </div>
             </DialogTrigger>
 
-            <DialogContent className="md:max-w-[600px] lg:max-w-[1000px] bg-zinc-200 dark:bg-zinc-900">
+            <DialogContent className="md:max-w-[600px] lg:max-w-[800px] bg-zinc-200 dark:bg-zinc-900">
               <DialogHeader>
                 <DialogTitle className="text-zinc-700 dark:text-zinc-200 flex gap-1 items-center">
                   Preview
@@ -265,7 +265,8 @@ export const UserTemplate = () => {
                       alt="Post"
                       width={500}
                       height={500}
-                      className="object-contain"
+                      style={{ objectFit: "contain" }}
+                      className="w-full h-full"
                       priority
                     />
                   </div>
