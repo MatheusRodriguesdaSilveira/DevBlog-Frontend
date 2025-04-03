@@ -52,7 +52,6 @@ export const UserTemplate = () => {
 
   const userSelect = (userPostInfo: { userId: string }) => {
     const { userId } = userPostInfo;
-    console.log(`id user: ${userId}`);
     setSelectedUserId(userId);
   };
 
@@ -77,6 +76,9 @@ export const UserTemplate = () => {
         });
 
         setUsers(response.data);
+        setUsers((prev) =>
+          prev!.filter((user) => user.id !== response.data.id)
+        );
       } catch (error) {
         console.error("Error loading user data:", error);
       }
@@ -120,10 +122,6 @@ export const UserTemplate = () => {
           return following;
         }
       );
-
-      console.log("user selecionado", userId);
-      console.log("following", following);
-      console.log("follower", follower);
 
       setFollowing(following?.length);
       setFollowers(follower?.length);
