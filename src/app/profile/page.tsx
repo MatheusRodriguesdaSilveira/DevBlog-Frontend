@@ -31,6 +31,8 @@ import {
   Pencil,
   SmilePlus,
   Trash2,
+  Users,
+  UserSearch,
 } from "lucide-react";
 
 import Image from "next/image";
@@ -107,10 +109,61 @@ const ProfilePage = () => {
     {}
   );
 
+  const [followingUsers, setFollowingUsers] = useState<UserData[]>([]);
+  const [followersUsers, setFollowersUsers] = useState<UserData[]>([]);
+
   const [following, setFollowing] = useState(false);
   const [followers, setFollowers] = useState(false);
-  const [followingUsers, setFollowingUsers] = useState([]);
-  const [followersUsers, setFollowersUsers] = useState([]);
+
+  const [searchFollower, setSearchFollower] = useState("");
+  const [searchFolloweds, setSearchFolloweds] = useState("");
+
+  useEffect(() => {
+    const fetchFollowedUsers = async () => {
+      try {
+        const token = getCookie("login");
+        const response = await api.get(
+          `/followed-users/?search=${searchFolloweds}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setFollowingUsers(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchFollowedUsers();
+  }, [searchFolloweds]);
+
+  useEffect(() => {
+    const fetchFollowersUsers = async () => {
+      try {
+        const token = getCookie("login");
+        const response = await api.get(
+          `/followers-users/?search=${searchFollower}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setFollowersUsers(response.data);
+        setFollowersUsers((prev) =>
+          prev!.filter((user) => user.id !== userData?.id)
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchFollowersUsers();
+  }, [searchFollower]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -150,6 +203,7 @@ const ProfilePage = () => {
             likes: post.likes.map((like: any) => like.userId),
           })
         );
+
         const likesByPost = likes?.reduce(
           (acc: any, { postId, likes }: any) => {
             acc[postId] = likes;
@@ -158,26 +212,16 @@ const ProfilePage = () => {
           {}
         );
 
-        const follower = response.data.followers?.map(
-          (follower: { id: string; followerId: string }) => {
-            return follower;
-          }
-        );
-
-        const following = response.data.following?.map(
-          (following: { id: string; followingId: string }) => {
-            return following;
-          }
-        );
-
         const followingUsers = response.data.following?.map(
           (followingUser: {
             follower: {
+              id: string;
               name: string;
               profilePicture: string;
             };
           }) => {
             return {
+              id: followingUser.follower.id,
               name: followingUser.follower.name,
               profilePicture: followingUser.follower.profilePicture,
             };
@@ -187,23 +231,24 @@ const ProfilePage = () => {
         const followersUsers = response.data.followers?.map(
           (followersUser: {
             followed: {
+              id: string;
               name: string;
               profilePicture: string;
             };
           }) => {
             return {
+              id: followersUser.followed.id,
               name: followersUser.followed.name,
               profilePicture: followersUser.followed.profilePicture,
             };
           }
         );
 
-        console.log("detalhes seguidos", followingUsers);
-
-        setFollowing(following?.length);
-        setFollowers(follower?.length);
-        setFollowingUsers(followingUsers);
+        setFollowers(followersUsers?.length);
         setFollowersUsers(followersUsers);
+
+        setFollowing(followingUsers?.length);
+        setFollowingUsers(followingUsers);
 
         setLikesByPost(likesByPost);
         setLiked(likesByPost?.[selectedPostId]?.includes(currentUserId));
@@ -392,13 +437,38 @@ const ProfilePage = () => {
 
   const token = getCookie("login");
   if (token === undefined) {
-    // handle the case where the cookie is not found
     console.error("Cookie not found");
     return;
   }
   const decoded = jwtDecode(token as string) as { sub: string };
 
   const currentUserId = decoded.sub;
+
+  const handleUnfollowButton = async (userId: string) => {
+    try {
+      const token = getCookie("login");
+      if (!token) {
+        console.error("Cookie not found");
+        return;
+      }
+
+      const response = await api.delete("/unfollow", {
+        data: {
+          followedId: currentUserId,
+          followerId: userId,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        setFollowingUsers((prev) => prev!.filter((user) => user.id !== userId));
+      }
+    } catch (error) {
+      console.error("🚨 Erro ao deixar de seguir:", error);
+    }
+  };
 
   return (
     <>
@@ -460,38 +530,63 @@ const ProfilePage = () => {
               </div>
             </div>
           </div>
+
           <div className="flex items-center justify-center text-xs lg:text-sm xl:text-base gap-5 font-semibold mt-5">
             <p className="text-zinc-700 dark:text-zinc-200 leading-[10px]">
               {post.length} publicações
             </p>
+
             {/* Seguidores */}
             <Dialog>
               <DialogTrigger className="text-zinc-700 dark:text-zinc-200 leading-[10px]">
                 {followers} seguidores
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="md:max-w-[300px] lg:max-w-[400px] bg-zinc-200 dark:bg-zinc-900">
                 <DialogHeader>
-                  <DialogTitle>Seguidores</DialogTitle>
+                  <DialogTitle className="flex items-center gap-1">
+                    Seguidores <Users className="size-5" />
+                  </DialogTitle>
                 </DialogHeader>
-                <DialogDescription></DialogDescription>
-                <div className="flex flex-col gap-2">
-                  {followersUsers.map((user, index) => (
-                    <div key={index}>
-                      <div className="flex items-center gap-2">
-                        <Image
-                          src={
-                            (user as UserData).profilePicture || TemplateError
-                          }
-                          alt="profile"
-                          width={100}
-                          height={100}
-                          priority
-                          className="size-8 rounded-full border border-red-500"
-                        />
-                        <div className="flex flex-col">
-                          <p className="2xl:text-base xl:text-sm text-xs font-medium">
-                            {(user as UserData).name || "Nome não disponível"}
-                          </p>
+                <DialogDescription asChild={true}>
+                  <span>
+                    <div className="flex justify-center items-center bg-zinc-300 w-full h-[1px] rounded-md" />
+                  </span>
+                </DialogDescription>
+
+                <div className="relative">
+                  <UserSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-zinc-900 dark:text-zinc-400 size-5" />
+                  <Input
+                    type="text"
+                    name="searchFollower"
+                    placeholder="Pesquisar"
+                    className="pl-8 w-full dark:border-zinc-500 border-zinc-900 focus-visible:ring-transparent"
+                    value={searchFollower}
+                    onChange={(e) => setSearchFollower(e.target.value)}
+                  />
+                </div>
+
+                {/* Captura os seguidores do usuário logado */}
+                <div className="flex flex-col">
+                  {followersUsers.map((followers) => (
+                    <div key={followers.id}>
+                      <div className="flex justify-between items-center bg-zinc-900 rounded-lg py-1.5 px-1.5 mb-2">
+                        <div
+                          key={followers.id}
+                          className="flex items-center gap-2"
+                        >
+                          <Image
+                            src={followers.profilePicture || UserProfile}
+                            alt="profile"
+                            width={500}
+                            height={500}
+                            priority
+                            className="size-10 rounded-full border border-red-500"
+                          />
+                          <div className="flex flex-col">
+                            <p className="2xl:text-base xl:text-sm text-xs font-medium">
+                              {followers.name || "Nome não disponível"}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -505,29 +600,60 @@ const ProfilePage = () => {
               <DialogTrigger className="text-zinc-700 dark:text-zinc-200 leading-[10px]">
                 {following} seguindo
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="md:max-w-[300px] lg:max-w-[400px] bg-zinc-200 dark:bg-zinc-900">
                 <DialogHeader>
-                  <DialogTitle>Seguindo</DialogTitle>
+                  <DialogTitle className="flex items-center gap-1">
+                    Seguindo <Users className="size-5" />
+                  </DialogTitle>
                 </DialogHeader>
-                <DialogDescription></DialogDescription>
-                <div className="flex flex-col gap-2">
-                  {followingUsers.map((user, index) => (
-                    <div key={index}>
-                      <div className="flex items-center gap-2">
-                        <Image
-                          src={
-                            (user as UserData).profilePicture || TemplateError
-                          }
-                          alt="profile"
-                          width={100}
-                          height={100}
-                          priority
-                          className="size-8 rounded-full border border-red-500"
-                        />
-                        <div className="flex flex-col">
-                          <p className="2xl:text-base xl:text-sm text-xs font-medium">
-                            {(user as UserData).name || "Nome não disponível"}
-                          </p>
+                <DialogDescription asChild={true}>
+                  <span>
+                    <div className="flex justify-center items-center bg-zinc-300 w-full h-[1px] rounded-md" />
+                  </span>
+                </DialogDescription>
+
+                <div className="relative">
+                  <UserSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-zinc-900 dark:text-zinc-400 size-5" />
+                  <Input
+                    type="text"
+                    name="searchFolloweds"
+                    placeholder="Pesquisar"
+                    className="pl-8 w-full dark:border-zinc-500 border-zinc-900 focus-visible:ring-transparent"
+                    value={searchFolloweds}
+                    onChange={(e) => setSearchFolloweds(e.target.value)}
+                  />
+                </div>
+
+                {/* Captura os seguidos pelo usuário logado */}
+                <div className="flex flex-col">
+                  {followingUsers.map((followeds) => (
+                    <div key={followeds.id}>
+                      <div className="flex justify-between items-center bg-zinc-900 rounded-lg py-1.5 px-1.5 mb-2">
+                        <div
+                          key={followeds.id}
+                          className="flex items-center gap-2"
+                        >
+                          <Image
+                            src={followeds.profilePicture || UserProfile}
+                            alt="profile"
+                            width={500}
+                            height={500}
+                            priority
+                            className="size-10 rounded-full border border-red-500"
+                          />
+                          <div className="flex flex-col">
+                            <p className="2xl:text-base xl:text-sm text-xs font-medium">
+                              {followeds.name || "Nome não disponível"}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => handleUnfollowButton(followeds.id)}
+                            className="text-xs md:text-sm text-zinc-200 flex rounded-md py-0.5 px-2 bg-zinc-600 hover:bg-zinc-700 duration-300"
+                          >
+                            Seguindo
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -535,6 +661,7 @@ const ProfilePage = () => {
                 </div>
               </DialogContent>
             </Dialog>
+
             <div className="">
               <DialogEditProfile />
             </div>
