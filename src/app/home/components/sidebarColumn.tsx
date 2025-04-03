@@ -10,13 +10,11 @@ import {
   ChartNoAxesColumnIncreasing,
   CircleChevronDown,
   CircleChevronUp,
+  RotateCw,
   UserPlus2,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
-
-import Image from "next/image";
-import User from "/public/user.png";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserTemplate } from "@/components/ui/userExample";
@@ -25,8 +23,8 @@ export const SideBarColumn = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const router = useRouter();
 
-  const handleLeave = () => {
-    router.push("/");
+  const handleRefresh = () => {
+    window.location.reload();
   };
 
   return (
@@ -64,6 +62,11 @@ export const SideBarColumn = () => {
 
           <Collapsible open={isOpen} onOpenChange={setIsOpen}>
             <div className="mx-4 border-2 rounded-2xl 2xl:p-5 xl:p-2 md:p-1 h-full">
+              <div className="right-7 absolute flex gap-1">
+                <button onClick={handleRefresh}>
+                  <RotateCw className="2xl:size-5 xl:size-4 text-red-500" />
+                </button>
+              </div>
               <div className="flex justify-center gap-1 pb-5 items-center">
                 <h1 className="font-bold 2xl:text-lg xl:text-xs md:text-xs">
                   Sugestões Para Você
