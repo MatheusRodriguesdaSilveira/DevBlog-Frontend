@@ -566,7 +566,7 @@ const ProfilePage = () => {
                 </div>
 
                 {/* Captura os seguidores do usuário logado */}
-                <div className="flex flex-col">
+                <div className="flex flex-col md:max-h-[250px] xl:max-h-[300px] 2xl:max-h-[400px] overflow-y-auto mx-1">
                   {followersUsers.map((followers) => (
                     <div key={followers.id}>
                       <div className="flex justify-between items-center bg-zinc-900 rounded-lg py-1.5 px-1.5 mb-2">
@@ -625,7 +625,7 @@ const ProfilePage = () => {
                 </div>
 
                 {/* Captura os seguidos pelo usuário logado */}
-                <div className="flex flex-col">
+                <div className="flex flex-col md:max-h-[250px] xl:max-h-[300px] 2xl:max-h-[400px] overflow-y-auto mx-1">
                   {followingUsers.map((followeds) => (
                     <div key={followeds.id}>
                       <div className="flex justify-between items-center bg-zinc-900 rounded-lg py-1.5 px-1.5 mb-2">
@@ -672,7 +672,7 @@ const ProfilePage = () => {
         <DropdownMenuSeparator className="2xl:w-7/12 xl:w-6/12 lg:w-5/12 md:w-5/12" />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 2xl:w-[1200px] xl:w-[750px] lg:w-[500px] md:w-[500px] mx-auto sm:p-6 lg:p-0">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 2xl:w-[1200px] xl:w-[650px] lg:w-[500px] md:w-[500px] mx-auto sm:p-6 lg:p-0">
         {post?.map((post) => (
           <Dialog key={post.id}>
             <DialogTrigger onClick={() => handleSelectPost(post.id)} asChild>
